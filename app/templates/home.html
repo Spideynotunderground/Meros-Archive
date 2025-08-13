@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meros Archives</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="The Meros Archive Logo" class="logo-image">
+                <div class="logo-text">
+                    <div class="logo-title">The Meros</div>
+                    <div class="logo-subtitle">Archive</div>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="#about">About</a></li>
+                <li><a href="{% url 'app:stories' %}">Stories</a></li>
+                <li><a href="https://t.me/meros_archive">Social media</a></li>
+                <li><a href="#ambassador">Become an ambassador</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="content-left">
+            <h1>
+                Preserving<br>
+                <span class="highlight">voices before</span><br>
+                <span class="highlight">they fade.</span>
+            </h1>
+            <p>
+                <strong>Meros</strong> preserves the untold stories of <a href="#">Uzbekistan's elders</a> —
+                <a href="#">capturing their wisdom and heritage</a> in <a href="#">three languages</a>,
+                starting from the heart of <a href="#">Bukhara</a>.
+            </p>
+        </div>
+
+        <div class="content-right">
+            <div class="pic-placeholder">Pic</div>
+            <div class="pic-placeholder">Pic</div>
+            <div class="pic-placeholder pic-large">Pic</div>
+        </div>
+    </main>
+    <section style="scroll-behavior: smooth;" id="about" class="about-section">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">About Meros</h2>
+                <p class="section-subtitle">Preserving the wisdom of generations</p>
+            </div>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Our Mission</h3>
+                    <p>The Meros Archive is dedicated to capturing and preserving the invaluable stories, wisdom, and
+                        cultural heritage of Uzbekistan's elders before they are lost to time.</p>
+
+                    <p>Starting from the historic city of Bukhara, we are building a comprehensive digital repository
+                        that celebrates the diverse voices and experiences that have shaped our cultural landscape.</p>
+                </div>
+
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">250+</span>
+                        <span class="stat-label">Stories Collected</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Languages</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Elders Interviewed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1</span>
+                        <span class="stat-label">Cultural Legacy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Become an Ambassador Section -->
+    <section id="ambassador" class="ambassador-section">
+        <div class="section">
+            <div class="ambassador-content">
+                <div class="section-header">
+                    <h2 class="section-title">Become an Ambassador</h2>
+                    <p class="section-subtitle">Join our mission to preserve cultural heritage</p>
+                </div>
+
+                <p class="ambassador-description">
+                    Help us expand our reach and impact by becoming a Meros Ambassador. Connect with elders in your
+                    community, collect their stories, and contribute to this vital preservation effort. Together, we can
+                    ensure no voice goes unheard.
+                </p>
+
+                <div class="ambassador-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎙️</span>
+                        <h3 class="benefit-title">Record Stories</h3>
+                        <p class="benefit-description">Learn professional interview techniques and help document
+                            meaningful conversations with community elders.</p>
+                    </div>
+
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🌍</span>
+                        <h3 class="benefit-title">Cultural Impact</h3>
+                        <p class="benefit-description">Make a lasting contribution to preserving your community's
+                            cultural heritage for future generations.</p>
+                    </div>
+
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🤝</span>
+                        <h3 class="benefit-title">Community Connection</h3>
+                        <p class="benefit-description">Build meaningful relationships with elders and fellow ambassadors
+                            while strengthening community bonds.</p>
+                    </div>
+                </div>
+
+                <a href="{% url 'app:form' %}" class="cta-button">Apply to Become an Ambassador</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
