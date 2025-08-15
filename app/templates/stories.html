@@ -1,11 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ story.headline }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            font-family: "Martel Sans", sans-serif;
+        }
+
+        .stories-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .no-stories {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            margin: 2rem;
+        }
+
+        h1 {
+            font-size: 5.25vmin;
+            text-align: center;
+            color: white;
+        }
+
+        p {
+            font-size: max(10pt, 2.5vmin);
+            line-height: 1.4;
+            color: #0e390e;
+            margin-bottom: 1.5rem;
+        }
+
+        .wrap {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            width: 85vmin;
+            height: 65vmin;
+            margin: 2rem auto;
+            transition: 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 1rem 0.75rem;
+            background: #186218;
+            transition: 0.4s ease-in-out;
+            z-index: 1;
+        }
+
+        .overlay-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* headline at top, author at bottom */
+            align-items: center;
+            text-align: center;
+            width: 15vmin;
+            height: 100%;
+            padding-left: 1rem;
+            padding-right: 1.25rem;
+            border-radius: 10%;
+            border: 3px solid;
+            border-image: linear-gradient(to bottom,
+                    #aea724 5%,
+                    forestgreen 35% 65%,
+                    #aea724 95%) 0 0 0 100%;
+            transition: 0.3s ease-in-out 0.2s;
+            z-index: 1;
+        }
+
+        .overlay-content .headline {
+            margin: 0 0 0.5rem;
+            font-size: clamp(1.1rem, 2.6vmin, 2rem);
+            color: white;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-content .author {
+            font-size: 0.85rem;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Hover hides only the headline */
+        .wrap:hover .overlay-content .headline {
+            opacity: 0;
+        }
+
+        .overlay-content h1 {
+            margin: 0 0 0.5rem;
+            line-height: 1.1;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            font-size: clamp(1.1rem, 2.6vmin, 2rem);
+            color: white;
+        }
+
+        .image-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60vmin;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: 0.3s ease-in-out;
+        }
+
+        .inset {
+            max-width: 50%;
+            margin: 0.25em 1em 1em 0;
+            border-radius: 0.25em;
+            float: left;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 1rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            width: 70px;
+            height: 4vmin;
+            transition: 0.3s ease-in-out 0.3s;
+        }
+
+        .dot {
+            width: 1rem;
+            height: 1rem;
+            background: yellow;
+            border: 1px solid indigo;
+            border-radius: 50%;
+            transition: 0.3s ease-in-out 0.3s;
+        }
+
+        .text {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60vmin;
+            height: 100%;
+            padding: 3vmin 4vmin;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: inset 1px 1px 15px 0 rgba(0 0 0 / 0.4);
+            overflow-y: auto;
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .tree {
+            place-self: center;
+            width: calc(50px + 2vw);
+            max-width: 200px;
+            height: auto;
+        }
+
+        .wrap:hover .overlay {
+            transform: translateX(-60vmin);
+        }
+
+        .wrap:hover .image-content {
+            width: 30vmin;
+        }
+
+        /* Removed .wrap:hover .overlay-content transform so it stays in place */
+        .wrap:hover .overlay-content {
+            border: none;
+            transition-delay: 0.2s;
+        }
+
+        .wrap:hover .dots {
+            transform: translateX(1rem);
+        }
+
+        .wrap:hover .dots .dot {
+            background: white;
+        }
+
+        .wrap:hover .text {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations and timing delays */
+        .animate {
+            animation-duration: 0.7s;
+            animation-timing-function: cubic-bezier(0.26, 0.53, 0.74, 1.48);
+            animation-fill-mode: backwards;
+        }
+
+        /* Pop In */
+        .pop {
+            animation-name: pop;
+        }
+
+        @keyframes pop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5, 0.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1, 1);
+            }
+        }
+
+        /* Slide In */
+        .slide {
+            animation-name: slide;
+        }
+
+        @keyframes slide {
+            0% {
+                opacity: 0;
+                transform: translate(4em, 0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+
+        /* Slide Left */
+        .slide-left {
+            animation-name: slide-left;
+        }
+
+        @keyframes slide-left {
+            0% {
+                opacity: 0;
+                transform: translate(-40px, 0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+
+        .slide-up {
+            animation-name: slide-up;
+        }
+
+        @keyframes slide-up {
+            0% {
+                opacity: 0;
+                transform: translateY(3em);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.6s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.9s;
+        }
+
+        .delay-4 {
+            animation-delay: 1.2s;
+        }
+
+        .delay-5 {
+            animation-delay: 1.5s;
+        }
+
+        .delay-6 {
+            animation-delay: 1.8s;
+        }
+
+        .delay-7 {
+            animation-delay: 2.1s;
+        }
+
+        .delay-8 {
+            animation-delay: 2.4s;
+        }
+    </style>
 </head>
+
 <body>
-    Hello world
+    <div class="stories-container">
+        {% for story in stories %}
+        <div class="wrap animate pop">
+            <div class="overlay">
+                <div class="overlay-content animate slide-left delay-2">
+                    <h1 class="headline animate slide-left pop delay-4">
+                        {{ story.headline|truncatechars:20 }}
+                    </h1>
+                    <div class="author">by Meros</div>
+                </div>
+                <div class="image-content animate slide delay-5"
+                    style="background-image: url('{% if story.images.first %}{{ story.images.first.image.url }}{% else %}https://via.placeholder.com/800x600/4a7c59/ffffff?text=No+Image{% endif %}');">
+                </div>
+                <div class="dots animate">
+                    {% for image in story.images.all|slice:":3" %}
+                    <div class="dot animate slide-up delay-{{ forloop.counter|add:5 }}"></div>
+                    {% empty %}
+                    <div class="dot animate slide-up delay-6"></div>
+                    <div class="dot animate slide-up delay-7"></div>
+                    <div class="dot animate slide-up delay-8"></div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="text">
+                {% if story.images.all.1 %}
+                <p>
+                    <img class="inset" src="{{ story.images.all.1.image.url }}" alt="Story image" />
+                    <strong>UZ:</strong><br>
+                    {{ story.description_uz|safe }}<br><br>
+
+                    <strong>RU:</strong><br>
+                    {{ story.description_ru|safe }}<br><br>
+
+                    <strong>EN:</strong><br>
+                    {{ story.description_en|safe }}
+                </p>
+                {% else %}
+                <p>
+                    <strong>UZ:</strong><br>
+                    {{ story.description_uz|safe }}<br><br>
+
+                    <strong>RU:</strong><br>
+                    {{ story.description_ru|safe }}<br><br>
+
+                    <strong>EN:</strong><br>
+                    {{ story.description_en|safe }}
+                </p>
+                {% endif %}
+
+                {% if story.images.all.2 %}
+                <img class="tree" src="{{ story.images.all.2.image.url }}" alt="Additional story image" />
+                {% endif %}
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="no-stories">
+            <h2>No stories available yet.</h2>
+        </div>
+        {% endfor %}
+    </div>
 </body>
+
 </html>
