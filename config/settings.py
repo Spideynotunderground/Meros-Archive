@@ -146,6 +146,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'files/uploads')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Maximum file size (in bytes)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024  # 100MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024   # 100MB
+
+# For forms
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
+
 try:
     from .settings_dev import *
 except ImportError:
